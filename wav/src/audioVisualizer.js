@@ -2,7 +2,7 @@
 
 export function initializeAudioVisualizer() {
   const canvas = document.getElementById('canvas-audio');
-  const file = document.getElementById('fileupload');
+  const file = document.getElementById('file-upload');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');

@@ -29,5 +29,7 @@ coverage
 
 *.tsbuildinfo
 
-# node modules
+# more
 node_modules
+/src/generated/prisma
+prisma/dev.db

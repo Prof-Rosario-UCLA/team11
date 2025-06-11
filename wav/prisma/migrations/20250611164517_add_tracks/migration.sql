@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "Track" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "artist" TEXT,
+    "duration" INTEGER,
+    "filePath" TEXT NOT NULL,
+    "uploadDate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" INTEGER NOT NULL,
+    CONSTRAINT "Track_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

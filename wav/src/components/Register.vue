@@ -1,7 +1,7 @@
 <template>
   <div class="auth-container">
-    <h1>WAV Login</h1>
-    <form @submit.prevent="handleLogin" id="form-container">
+    <h1>Register</h1>
+    <form @submit.prevent="handleRegister" id="form-container">
       <div class="form-field">
         <label for="username">Username</label>
         <input 
@@ -9,7 +9,7 @@
           id="username" 
           v-model="username" 
           required
-          placeholder="Enter your username"
+          placeholder="Choose a username"
         />
       </div>
       <div class="form-field">
@@ -19,13 +19,14 @@
           id="password" 
           v-model="password" 
           required
-          placeholder="Enter your password"
+          placeholder="Choose a password"
         />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
       <p v-if="error" class="error">{{ error }}</p>
+      <p v-if="success" class="success">{{ success }}</p>
       <p class="account-link">
-        Create an Account: <router-link to="/register">Register</router-link>
+        Already have an account? <router-link to="/">Login</router-link>
       </p>
     </form>
   </div>
@@ -34,26 +35,30 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { authenticateUser } from '../utils/auth'
+import { createUser } from '../utils/auth'
 
 const username = ref('')
 const password = ref('')
 const error = ref('')
+const success = ref('')
 const router = useRouter()
 
-const handleLogin = async() => {
-  error.value = ''
+const handleRegister = async () => {
   try {
-    const result = await authenticateUser(username.value, password.value)
-    if (result.success) {
-      localStorage.setItem('isAuthenticated', 'true')
-      router.push('/visualizer')
+    const user = await createUser(username.value, password.value)
+    if (user) {
+      success.value = 'Registration successful! Proceed to login.'
+      username.value = ''
+      password.value = ''
+      setTimeout(() => {
+        router.push('/')
+      }, 1500)
     } else {
-      error.value = result.error || 'Login failed.'
+      error.value = 'Registration failed. Try a different username.'
     }
   } catch (err) {
-    error.value = 'Network error, please try again.'
-    console.error('Login error:', err)
+    error.value = 'An error occurred during registration.'
+    console.error(err)
   }
 }
 </script>
