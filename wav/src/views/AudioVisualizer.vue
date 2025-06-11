@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { initializeAudioVisualizer } from '../audioVisualizer.js'
 import TrackList from '../components/TrackList.vue'
+import * as mm from 'music-metadata-browser'
 
 const props = defineProps({
   userId: {
@@ -14,38 +15,69 @@ const audioElement = ref(null)
 const fileInput = ref(null)
 const trackList = ref(null)
 
+const extractMetadata = async (file) => {
+  try {
+    const metadata = await mm.parseBlob(file)
+    if (metadata.format.duration) {
+      duration = Math.floor(metadata.format.duration)
+    } else {
+      const objectUrl = URL.createObjectURL(file)
+      duration = await getDurationFromAudio(objectUrl)
+      URL.revokeObjectURL(objectUrl)
+    }
+    return {
+      title: metadata.common.title || file.name.replace(/\.[^/.]+$/, ""),
+      artist: metadata.common.artist || 'Unknown Artist',
+      duration: duration || 0,
+      filePath: URL.createObjectURL(file),
+      userId: props.userId
+    }
+  } catch (error) {
+    console.warn('Error extracting metadata:', error)
+    const duration = await getDurationFromAudio(URL.createObjectURL(file))
+    return {
+      title: file.name.replace(/\.[^/.]+$/, ""),
+      artist: 'Unknown Artist',
+      duration: duration,
+      filePath: URL.createObjectURL(file),
+      userId: props.userId
+    }
+  }
+}
+
+const getDurationFromAudio = (url) => {
+  return new Promise((resolve) => {
+    const audio = new Audio()
+    audio.src = url
+    audio.onloadedmetadata = () => {
+      resolve(Math.floor(audio.duration))
+      URL.revokeObjectURL(url)
+    }
+    audio.onerror = () => resolve(0)
+  })
+}
+
 const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
-  const objectUrl = URL.createObjectURL(file)
-  audioElement.value.src = objectUrl
-  
-  // Extract metadata
-  const metadata = {
-    title: file.name.replace(/\.[^/.]+$/, ""),
-    artist: 'Unknown',
-    duration: 0,
-    filePath: objectUrl,
-    userId: props.userId
-  }
 
-  // Save track data
   try {
+    const metadata = await extractMetadata(file)
+    audioElement.value.src = metadata.filePath
+
     const response = await fetch('/api/tracks', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(metadata)
     })
     const data = await response.json()
     if (data.success) {
       trackList.value.fetchTracks()
     } else {
-      console.error('Could not save track metadata.')
+      console.error('Failed to save track:', data.error)
     }
   } catch (error) {
-    console.error('Error saving track:', error)
+    console.error('Error processing file:', error)
   }
 }
 

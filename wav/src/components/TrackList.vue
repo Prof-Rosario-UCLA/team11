@@ -2,7 +2,7 @@
   <div class="track-list">
     <h3>Upload History</h3>
     <ul>
-      <li v-for="track in tracks" :key="track.id" @click="selectTrack(track)">
+      <li v-for="track in tracks" :key="track.id">
         <div class="track-info">
           <span class="track-title">{{ track.title }}</span>
           <span class="track-artist">{{ track.artist || 'Unknown' }}</span>
@@ -43,10 +43,6 @@ const formatDuration = (s) => {
   const mins = Math.floor(s / 60)
   const secs = s % 60
   return `${mins}:${secs.toString().padStart(2, '0')}`
-}
-
-const selectTrack = (track) => {
-  emit('trackSelected', track)
 }
 
 onMounted(fetchTracks)
