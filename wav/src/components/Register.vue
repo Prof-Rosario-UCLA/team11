@@ -3,23 +3,27 @@
     <h1>Register</h1>
     <form @submit.prevent="handleRegister" id="form-container">
       <div class="form-field">
-        <label for="username">Username</label>
+        <label for="username" id="username-label">Username</label>
         <input 
           type="text" 
           id="username" 
           v-model="username" 
           required
           placeholder="Choose a username"
+          aria-labelledby="username-label"
+          aria-required="true"
         />
       </div>
       <div class="form-field">
-        <label for="password">Password</label>
+        <label for="password" id="password-label">Password</label>
         <input 
           type="password" 
           id="password" 
           v-model="password" 
           required
           placeholder="Choose a password"
+          aria-labelledby="password-label"
+          aria-required="true"
         />
       </div>
       <button type="submit">Register</button>

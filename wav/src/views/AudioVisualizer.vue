@@ -70,7 +70,7 @@ onMounted(() => {
         accept="audio/*" 
         @change="handleFileUpload" 
       />
-      <audio id="audio-player" ref="audioElement" controls></audio>
+      <audio id="audio-player" ref="audioElement" aria-label="Audio player" controls></audio>
     </div>
     <TrackList ref="trackList" :userId="userId" @track-selected="handleTrackSelected" />
   </div>

@@ -33,7 +33,7 @@
   text-decoration: underline;
 }
 .error {
-  color: red;
+  color: #cd2e2e;
   margin-top: 10px;
   text-align: center;
 }
