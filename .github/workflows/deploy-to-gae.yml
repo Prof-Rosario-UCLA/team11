@@ -32,6 +32,14 @@ jobs:
 
       - name: Build Vite frontend
         run: npm run build
+        
+      - name: Render app.yaml with secrets
+        run: |
+          cat > app.yaml <<EOF
+          runtime: python39
+          env_variables:
+            DATABASE_URL: "${{ secrets.CONNECTION_STRING }}"
+          EOF
 
       - name: Prepare production files
         run: |
