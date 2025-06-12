@@ -36,7 +36,6 @@ jobs:
       - name: Render app.yaml with secrets
         run: |
           cat > app.yaml <<EOF
-          runtime: python39
           env_variables:
             DATABASE_URL: "${{ secrets.CONNECTION_STRING }}"
           EOF
