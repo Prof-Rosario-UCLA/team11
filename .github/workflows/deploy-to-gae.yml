@@ -7,7 +7,7 @@ on:
 
 env:
   NODE_ENV: production
-  DATABASE_URL: ${{ secrets.CLOUD_SQL_CONNECTION_STRING }}
+  DATABASE_URL: ${{ secrets.CONNECTION_STRING }}
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
 
 jobs:
