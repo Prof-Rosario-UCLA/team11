@@ -1,0 +1,51 @@
+# .gcloudignore
+
+# Always ignore .gcloudignore itself
+.gcloudignore
+
+# Node modules (both root and /server)
+node_modules/
+server/node_modules/
+
+# Build output (Vue)
+dist/
+build/
+*.log
+
+# Build output (Express, if any)
+server/dist/
+server/build/
+server/*.log
+
+# Local env files
+.env
+.env.*
+server/.env
+server/.env.*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Test, coverage, and misc
+coverage/
+server/coverage/
+*.test.js
+*.spec.js
+server/*.test.js
+server/*.spec.js
+
+# Git
+.git/
+.gitignore
+
+# npm/yarn/pnpm lock files (optional, if you don't want to upload them)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+server/package-lock.json
+server/yarn.lock
+server/pnpm-lock.yaml
