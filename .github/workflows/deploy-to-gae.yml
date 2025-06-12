@@ -53,7 +53,7 @@ jobs:
       - name: Google App Engine
         uses: google-github-actions/deploy-appengine@v0.4.0
         with:
-          project_id: ${{ secrets.CONNECTION_STRING }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           version: main
           flags: --no-cache
           deliverables: app.yml
