@@ -53,4 +53,4 @@ jobs:
       - name: Deploy to App Engine
         run: |
           gcloud config set app/cloud_build_timeout 1600
-           run: | gcloud app deploy app.yaml --project ${{ secrets.GCP_PROJECT_ID }} --update-env-vars "DATABASE_URL=${{ secrets.DATABASE_URL }},NODE_ENV=production"
+           run: | gcloud app deploy app.yaml --project ${{ secrets.GCP_PROJECT_ID }}
