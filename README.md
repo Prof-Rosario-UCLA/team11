@@ -3,8 +3,9 @@
 ## Project Setup Instructions
 
 ```sh
+npm install
 npm run build
-mv -r dist/ server/public/
+cp -r dist server/public
 ```
 
 ### Run Server
@@ -12,3 +13,5 @@ mv -r dist/ server/public/
 ```sh
 npm run start
 ```
+
+Open http://localhost:{server port #}/
