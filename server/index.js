@@ -64,7 +64,7 @@ app.post('/api/register', async (req, res) => {
     }
     res.status(500).json({ 
       success: false, 
-      error: e.toString()
+      error: error.toString()
     })
   }
 })
