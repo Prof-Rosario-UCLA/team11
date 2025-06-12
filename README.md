@@ -14,4 +14,4 @@ cp -r dist server/public
 npm run start
 ```
 
-Open http://localhost:{server port #}/
+Open localhost:{server port #}/
