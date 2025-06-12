@@ -53,6 +53,7 @@ const handleLogin = async() => {
     const result = await authenticateUser(username.value, password.value)
     if (result.success) {
       localStorage.setItem('isAuthenticated', 'true')
+      localStorage.setItem('userId', result.userId)
       router.push('/visualizer')
     } else {
       error.value = result.error || 'Login failed.'
