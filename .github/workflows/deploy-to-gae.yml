@@ -53,5 +53,5 @@ jobs:
       - name: Google App Engine
         run: |
           gcloud config set app/cloud_build_timeout 1600
-          gcloud app deploy app.yml --quiet --verbosity=debug
+          gcloud app deploy app.yaml --quiet --verbosity=debug
 
