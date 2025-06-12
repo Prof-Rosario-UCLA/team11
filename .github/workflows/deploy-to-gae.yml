@@ -40,6 +40,7 @@ jobs:
           mkdir -p server/tmp
           touch server/tmp/prod.db
           npx prisma generate
+          npx prisma migrate deploy
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
