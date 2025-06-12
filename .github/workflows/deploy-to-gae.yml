@@ -49,8 +49,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - name: Deploy to App Engine
-        run: |
-          gcloud config set app/cloud_build_timeout 1600
-          gcloud app deploy app.yml --project ${{ secrets.GCP_PROJECT_ID }}
+      
+      - name: Google App Engine
+        uses: google-github-actions/deploy-appengine@v0.4.0
+        with:
+          project_id: ${{ secrets.CONNECTION_STRING }}
+          version: main
+          flags: --no-cache
+          deliverables: app.yml
