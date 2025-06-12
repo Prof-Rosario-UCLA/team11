@@ -1,0 +1,56 @@
+name: Deploy to Google App Engine
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_ENV: production
+  DATABASE_URL: "file:/tmp/prod.db" # SQLite in writable location
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Vite frontend
+        run: npm run build
+
+      - name: Prepare production files
+        run: |
+          # Move built frontend to server/public
+          mkdir -p server/public
+          cp -R dist/* server/public/
+          
+          # Initialize SQLite database
+          mkdir -p server/tmp
+          touch server/tmp/prod.db
+          
+          # Generate Prisma client
+          npx prisma generate
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Deploy to App Engine
+        run: |
+          gcloud config set app/cloud_build_timeout 1600
+          gcloud app deploy app.yml --quiet
