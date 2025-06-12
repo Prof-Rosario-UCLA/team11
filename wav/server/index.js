@@ -18,6 +18,10 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
 }))
+
+// Serve static files from ../dist (now copied to server/public)
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(bodyParser.json())
 
 // Error handling middleware
@@ -140,10 +144,19 @@ app.get('/api/tracks/:userId', async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to fetch tracks.' })
   }
 })
+// SPA fallback
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'), (err) => {
+    if (err) {
+      console.error('Failed to send index.html:', err);
+      res.status(404).send('Not found');
+    }
+  });
+});
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`)
-})
+  console.log(`Server running on port ${port}`);
+});
 
 process.on('SIGTERM', async () => {
   await prisma.$disconnect()

@@ -1,19 +1,11 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        secure: false,
-        ws: true
-      }
-    }
-  }
-})
+  plugins: [vue()],
+  build: {
+    outDir: './dist',  // Builds to root /dist
+    emptyOutDir: true,
+  },
+  publicDir: './public'  // Your existing public dir
+});

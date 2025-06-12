@@ -1,0 +1,45 @@
+name: Deploy to GAE
+
+on:
+  push:
+    branches: [main]
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Vite frontend
+        run: npm run build  # Outputs to /dist in root
+
+      - name: Prepare production files
+        run: |
+          # Move built frontend to server/public (where Express will serve it)
+          mkdir -p server/public
+          cp -R dist/* server/public/
+          
+          # Initialize SQLite in writable location
+          mkdir -p server/tmp
+          touch server/tmp/prod.db
+          npx prisma migrate deploy
+
+      - name: Deploy to App Engine
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          gcloud app deploy app.yml --quiet
