@@ -5,7 +5,3 @@ handlers:
   # Serve all traffic via Express
   - url: /.*
     script: auto
-
-# include environment variables
-includes:
-  - env_variables.yaml
