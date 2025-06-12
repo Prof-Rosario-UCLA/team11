@@ -41,11 +41,3 @@ server/*.spec.js
 # Git
 .git/
 .gitignore
-
-# npm/yarn/pnpm lock files (optional, if you don't want to upload them)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-server/package-lock.json
-server/yarn.lock
-server/pnpm-lock.yaml
