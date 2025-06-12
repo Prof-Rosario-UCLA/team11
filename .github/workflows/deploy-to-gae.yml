@@ -55,5 +55,3 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           version: main
-          flags: --no-cache
-          deliverables: app.yml
