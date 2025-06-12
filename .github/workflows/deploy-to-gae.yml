@@ -54,5 +54,4 @@ jobs:
         uses: google-github-actions/deploy-appengine@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          deliverable: app.yml
           version: main
